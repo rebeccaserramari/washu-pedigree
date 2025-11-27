@@ -10,39 +10,53 @@ These scripts are optimized for the **MetaCentrum cluster environment** (use **s
 
 ---
 
-1. `identify_rdna_reads.array.sh`
-   ```bash
-   identify_rdna_reads.array.sh <reference.fasta> <fastq_directory> <output_ids.txt>
-   ```
-    **Variables**
+### 1. `identify_rdna_reads.array.sh`
+Identify ONT reads containing rDNA by aligning each FASTQ read to an rDNA reference and selecting those with sufficiently high alignment scores.
+
+- **Features**
+  - Identifies reads as rDNA reads only when strongly aligns to the reference (alignment score ≥ 3000 by default).
+
+- **Arguments**
     - `<reference.fasta>` - **reference rDNA sequence** (array) used for alignment in fasta format
     - `<fastq_directory>` - directory containing **basecalled FASTQ files**, from which the **rDNA-containing reads will be identified** and extracted.
     - `<output_ids.txt>` - **path** where the list of detected rDNA read IDs will be written
    
-    **Dependencies**
+- **Dependencies**
     - `minimap2` (available in the provided virtual environment)
+
+```bash
+   # Usage
+   identify_rdna_reads.array.sh <reference.fasta> <fastq_directory> <output_ids.txt>
+ ```
    
-    **Output**
+- **Output**
     - **text file** listing **read IDs** that **contain rDNA sequences**
     - line format: `<fastq_filename>:<read_id>`
 
 ---
 
-2. `prepare_rdna_pod5.sh`
-   ```bash
-   prepare_rdna_pod5.sh <pod5_input_directory> <rdna_ids.txt> <output_merged.pod5> <log_directory>
-   ```
+### 2. `prepare_rdna_pod5.sh`
+Extract rDNA reads from the original POD5 files and generate a single, merged POD5 file containing only those rDNA reads.
+
+- **Features**
+  - Uses `pod5 subset` to extract read IDs with exact matching. 
+  - Merges all extracted POD5 files into one using `pod5 merge`.
    
-   **Variables**  
+- **Arguments**  
    - `<pod5_input_directory>` - directory containing the **original POD5 files** (needs to have subdirectory <pod5_input_directory>/pod5/)
    - `<rdna_ids.txt>` - text file listing rDNA reads (line format: `<fastq_filename>:<read_id>`)
    - `<output_merged.pod5>` - path where the final merged POD5 file containing only rDNA reads will be saved
    - `<log_directory>` - directory where logs will be written
 
-   **Dependencies**
+- **Dependencies**
    - `POD5 CLI` tools (pod5 subset, pod5 merge)
 
-   **Output**
+```bash
+   # Usage
+   prepare_rdna_pod5.sh <pod5_input_directory> <rdna_ids.txt> <output_merged.pod5> <log_directory>
+   ```
+
+- **Output**
    - **merged POD5 file** containing only **reads that include the rDNA reference array**.
 
 ---
