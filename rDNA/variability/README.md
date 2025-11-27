@@ -163,7 +163,6 @@ python g4_analysis.py rDNA_alignment.fasta g4_predictions.gff g4_conservation.ts
 
 - **Output**
   - TSV file <output_tsv> with columns `seqid, start, end, score, attributes, sequence_from_alignment, conserved(%)`
-  - 
 
 
 
