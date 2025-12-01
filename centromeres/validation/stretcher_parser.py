@@ -87,7 +87,7 @@ def parse(input_file, output_file, sequence_name: str, offset_seq1 = 0, offset_s
     - The function ignores leading bases until it finds the first valid base pair (A/C/G/T)
         in both sequences at the start and end.
      - Base mismatches are counted only for positions where both sequences
-        contain a nucleotide; positions with gaps ('-') are excluded from
+        contain a nucleotide; positions with gaps ('-') are included in
         the mismatch count.
     - Gaps ('-') are recorded separately in the output.
 
@@ -190,10 +190,10 @@ if __name__ == '__main__':
     # Print statistics
     print(f"Alignment statistics for sequence '{seq_name}':")
     print(f"  Total aligned positions (excluding ignored start and end): {length}")
-    print(f"  Base mismatches (including gaps): {mismatches + gaps}")
+    print(f"  Base mismatches (including gaps): {mismatches}")
     print(f"  Gaps detected: {gaps}")
     if length > 0:
-        mismatch_rate = (mismatches + gaps) / length * 100
+        mismatch_rate = mismatches / length * 100
         gap_rate = gaps / length * 100
         print(f"  Mismatch rate (including gaps): {mismatch_rate:.8f}%")
         print(f"  Gap rate: {gap_rate:.8f}%")
