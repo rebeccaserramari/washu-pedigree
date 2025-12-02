@@ -7,12 +7,12 @@ The pipeline consists of the following stages:
 1. Generating block query metadata
 2. Extracting block sequences
 3. Variant calling inside transmitted blocks
-4. Building BED files
+4. Building BED files for liftover from variant files
 5. Liftover to opposite haplotypes
-6. Extracting lifted‑over sequence context
+6. Extracting lifted‑over sequences
 7. Summarizing and clustering switch‑error‑prone variants
 
-Each stage is controlled by a dedicated script described below.
+Each stage is performed by a dedicated script described below.
 
 ---
 
@@ -93,15 +93,12 @@ Performs variant calling within each transmitted block.
 Variant calling is done in *mother‑based coordinate system*:
 
 * **grandparent → mother**
-* **daughter → mother**
+* **granddaughter → mother**
 
 We then subtract granddaughter variants from grandparent variants, keeping only variants that:
 
-* appear in the grandparent
-* are present in the mother
-* and are inherited by the daughter
-
-Then variants originating in problematic regions are filtered using the provided BED masks.
+* appear between grandparent and mother, but are preserved in granddaughter
+* do not origin from problematic regions in grandparents or in mother
 
 Outputs VCF files for each transmitted block.
 
@@ -142,7 +139,7 @@ Generates chain files and performs liftover of variant BEDs to the opposite hapl
 
 ### Description
 
-For each assembly × chromosome × haplotype, chain files are built to enable:
+For each assembly × chromosome × haplotype, chain files are built to enable liftover:
 
 ```
 {haplotypeA} → {haplotypeB}
@@ -154,11 +151,11 @@ Outputs lifted BED files.
 
 ---
 
-## 5. Extract Lifted‑Over Sequence Context
+## 5. Extract Lifted‑Over Sequences
 
 **Script:** `5_extract_lifted.py`
 
-Extracts sequence context for lifted‑over variant regions.
+Extracts sequences for lifted‑over variants.
 
 ### Arguments
 
@@ -231,3 +228,14 @@ Outputs:
 | 5    | `beds_post_extraction/`          |
 | 6    | `plots/`, VCF + BED outputs      |
 
+
+---
+
+## Packages
+
+All packages used, including their versions, are available in **environment.yml** file. To run this pipeline,
+you may use conda environment manager:
+
+```sh
+conda env create --name bioinfo --file=environment.yml
+```
